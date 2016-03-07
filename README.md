@@ -27,6 +27,56 @@
 @end
 
 ```
+
+*核心代码*
+
+```
+- (void)drawInContext:(CGContextRef)contextRef {
+    //    CGFloat originalRadius = _radius;
+    CGFloat totalAngle = _endAngle - _startAngle;
+    CGRect rect = self.bounds;
+    CGPoint cP = CGPointMake(rect.size.width/2, rect.size.height/2);
+    CGContextSetLineJoin(contextRef, kCGLineJoinRound);
+    CGContextSetFlatness(contextRef, 2.0);
+    CGContextSetAllowsAntialiasing(contextRef, true);
+    CGContextSetShouldAntialias(contextRef, true);
+    CGContextSetInterpolationQuality(contextRef, kCGInterpolationHigh);
+    CGContextSetLineWidth(contextRef,2.0f);     //设置线条宽度
+    
+    for (int i = 0; i < _total; i++) {
+        //计算初始点
+        CGFloat x0 = cP.x + cosf(_startAngle + totalAngle*i/_total)*_innerRadius;
+        CGFloat y0 = cP.y + sinf(_startAngle + totalAngle*i/_total)*_innerRadius;
+        CGContextMoveToPoint(contextRef, x0, y0);
+        //计算终点
+        CGFloat x = cP.x + cosf(_startAngle + totalAngle*i/_total)*_radius;
+        CGFloat y = cP.y + sinf(_startAngle + totalAngle*i/_total)*_radius;
+        //画线
+        CGContextAddLineToPoint(contextRef, x, y);
+        //设置颜色
+        CGContextSetStrokeColorWithColor(contextRef, _color.CGColor);
+        CGContextSetFillColorWithColor(contextRef, _color.CGColor);
+        //设置线条起点和终点的状态 (例如：圆角)
+        //CGContextSetLineCap(contextRef, kCGLineCapRound);
+        CGContextDrawPath(contextRef, kCGPathFillStroke);
+    }
+    //在这里你可以 对最后绘制出来的那条已完成的线条所在位置进行自己定制 (例如：绘制一个圆环标示一下)
+    for (int i = 0; i < _completed; i++) {
+        CGFloat x0 = cP.x + cosf(_startAngle + totalAngle*i/_total)*_innerRadius;
+        CGFloat y0 = cP.y + sinf(_startAngle + totalAngle*i/_total)*_innerRadius;
+        CGContextMoveToPoint(contextRef, x0, y0);
+        CGFloat x = cP.x + cosf(_startAngle + totalAngle*i/_total)*_radius;
+        CGFloat y = cP.y + sinf(_startAngle + totalAngle*i/_total)*_radius;
+        CGContextAddLineToPoint(contextRef, x, y);
+        CGContextSetStrokeColorWithColor(contextRef, _completedColor.CGColor);   //设置颜色
+        CGContextSetFillColorWithColor(contextRef, _completedColor.CGColor);
+        CGContextDrawPath(contextRef, kCGPathFillStroke);
+    }
+//    CAShapeLayer *shapeLayer ;
+//    [shapeLayer setLineCap:kCALineCapRound];
+}
+```
+
 *绘图起始0角度如图，后面请参考此图*
 
 ![角度计算.png](https://ooo.0o0.ooo/2016/03/01/56d53f8cb0a11.png)
