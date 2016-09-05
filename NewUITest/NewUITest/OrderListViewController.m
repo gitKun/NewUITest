@@ -35,26 +35,26 @@
 }
 
 /**
- *  截WebView的全部屏
+ *  截ScrollView的全部屏
  */
 - (UIImage *)screenShot:(UIScrollView *)scrollView {
     UIImage* image = nil;
     UIGraphicsBeginImageContextWithOptions(scrollView.contentSize, YES, [UIScreen mainScreen].scale);
 
-    //保存collectionView当前的偏移量
+    //保存ScrollView当前的偏移量
     CGPoint savedContentOffset = scrollView.contentOffset;
     CGRect saveFrame = scrollView.frame;
 
-    //将collectionView的偏移量设置为(0,0)
+    //将ScrollView的偏移量设置为(0,0)
     scrollView.contentOffset = CGPointZero;
     scrollView.frame = CGRectMake(0, 0, scrollView.contentSize.width,scrollView.contentSize.height);
 
-    //在当前上下文中渲染出collectionView
+    //在当前上下文中渲染出ScrollView
     [scrollView.layer renderInContext: UIGraphicsGetCurrentContext()];
     //截取当前上下文生成Image
     image = UIGraphicsGetImageFromCurrentImageContext();
 
-    //恢复collectionView的偏移量
+    //恢复ScrollView的偏移量
     scrollView.contentOffset = savedContentOffset;
     scrollView.frame = saveFrame;
 
