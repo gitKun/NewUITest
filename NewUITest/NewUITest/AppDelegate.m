@@ -8,15 +8,57 @@
 
 #import "AppDelegate.h"
 
+#define DRRGBA(r,g,b,a) \
+[UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:a]
+
+#define DRRGB(r,g,b) \
+DRRGBA(r,g,b,1)
+
 @interface AppDelegate ()
 
 @end
 
 @implementation AppDelegate
 
+/**
+ *  @brief  根据颜色生成纯色图片
+ *
+ *  @param color 颜色
+ *
+ *  @return 纯色图片
+ */
+- (UIImage *)dr_imageWithColor:(UIColor *)color {
+    CGRect rect = CGRectMake(0.0f, 0.0f, 1.0f, 1.0f);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, [color CGColor]);
+    CGContextFillRect(context, rect);
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
+}
+
+- (void)initNavigationBar {
+    [[UINavigationBar appearance] setTranslucent:NO];
+    [[UINavigationBar appearance] setBarTintColor:DRRGB(74.0f, 74.0f, 74.0f)];
+    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
+
+    UIImage *image = [self dr_imageWithColor:DRRGB(74.0f, 74.0f, 74.0f)];
+    [[UINavigationBar appearance] setBackgroundImage:image
+                                  forBarPosition:UIBarPositionAny
+                                  barMetrics:UIBarMetricsDefault];
+    [[UINavigationBar appearance] setShadowImage:[UIImage new]];
+
+    [[UINavigationBar appearance] setTitleTextAttributes:@{
+                NSForegroundColorAttributeName: [UIColor whiteColor],
+                NSFontAttributeName: [UIFont systemFontOfSize:20.0f]
+                }
+     ];
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    [self initNavigationBar];
     return YES;
 }
 

@@ -71,7 +71,8 @@
         default:
             break;
     }
-    
+
+    self.orderNumberLabel.text = [model objectForKey:@"orderNum"];
 }
 //- (void)colorsForStatusView {
 //    UIColor *huise = [UIColor colorWithRed:191/255.0 green:191/255.0 blue:191/255.0 alpha:1];
